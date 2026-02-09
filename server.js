@@ -123,7 +123,13 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-app.listen(PORT, () => {
-    console.log(`✨ Cheerful Chatbot server running on http://localhost:${PORT}`);
-    console.log(`💙 Ready to spread some positivity!`);
-});
+// Export for Vercel serverless
+export default app;
+
+// Local development server
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`✨ Cheerful Chatbot server running on http://localhost:${PORT}`);
+        console.log(`💙 Ready to spread some positivity!`);
+    });
+}
