@@ -1,0 +1,61 @@
+/* Custom animations and styles that complement Tailwind */
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce-dot {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-8px);
+    }
+}
+
+.animate-slide-in {
+    animation: slide-in 0.4s ease-out;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f9fafb;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Typing indicator animation */
+.typing-dot {
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+    display: inline-block;
+    animation: bounce-dot 1.3s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
