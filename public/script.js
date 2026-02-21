@@ -5,6 +5,7 @@ const suggestions = document.getElementById('suggestions');
 
 let isTyping = false;
 const sessionId = generateSessionId();
+let conversationHistory = []; // Store conversation history for serverless
 
 // Generate a unique session ID
 function generateSessionId() {
@@ -28,6 +29,9 @@ async function sendMessage() {
     // Add user message to chat
     addMessage(message, 'user');
     
+    // Add to conversation history
+    conversationHistory.push({ role: 'user', content: message });
+    
     // Show typing indicator
     showTypingIndicator();
     
@@ -39,7 +43,8 @@ async function sendMessage() {
             },
             body: JSON.stringify({
                 message: message,
-                sessionId: sessionId
+                sessionId: sessionId,
+                conversationHistory: conversationHistory
             })
         });
         
@@ -49,9 +54,13 @@ async function sendMessage() {
         hideTypingIndicator();
         
         if (data.error) {
-            addMessage('Sorry, I had trouble understanding that. Could you try again?', 'bot');
+            const errorMessage = data.error || 'Sorry, I had trouble understanding that. Could you try again?';
+            addMessage(errorMessage, 'bot');
+            // Don't add error to conversation history
         } else {
             addMessage(data.message, 'bot');
+            // Add bot response to conversation history
+            conversationHistory.push({ role: 'assistant', content: data.message });
         }
         
     } catch (error) {
