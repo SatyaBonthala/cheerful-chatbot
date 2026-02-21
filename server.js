@@ -109,6 +109,14 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
+        // Verify API key is configured
+        if (!process.env.GROQ_API_KEY) {
+            console.error('GROQ_API_KEY is not configured in .env file');
+            return res.status(500).json({ 
+                error: 'Server configuration error. Please check API key setup.' 
+            });
+        }
+
         // Get or create conversation for this session
         if (!conversations.has(sessionId)) {
             conversations.set(sessionId, createConversation());
@@ -128,8 +136,9 @@ app.post('/api/chat', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error details:', error.message);
-        console.error('Full error:', error);
+        console.error('❌ Error in /api/chat:');
+        console.error('Message:', error.message);
+        console.error('Stack:', error.stack);
         res.status(500).json({ 
             error: 'Sorry, I had trouble processing that. Can you try again?',
             details: error.message 
@@ -147,6 +156,11 @@ app.post('/api/clear', (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok' });
+});
+
+// Favicon handler to prevent 404 errors
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
 });
 
 // Export for Vercel serverless
